@@ -81,11 +81,11 @@ with open("azerbaijan2023.csv", "w", encoding="utf8") as dat:
         print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
 
 
-url11 = "https://www.formula1.com/en/results.html/2022/races/1124/bahrain/race-result.html"
-odgovor11 = requests.get(url11) 
-juha11 = bs4.BeautifulSoup(odgovor11.content)
+url17 = "https://www.formula1.com/en/results.html/2022/races/1124/bahrain/race-result.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
 
-rezultati = juha11.find("table", attrs={"class": "resultsarchive-table"})
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
 
 with open("bahrain2022.csv", "w", encoding="utf8") as dat:
     print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
@@ -100,11 +100,11 @@ with open("bahrain2022.csv", "w", encoding="utf8") as dat:
         tocke = vrstica[10]
         print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
 
-url11 = "https://www.formula1.com/en/results.html/2022/races/1125/saudi-arabia/race-result.html"
-odgovor11 = requests.get(url11) 
-juha11 = bs4.BeautifulSoup(odgovor11.content)
+url17 = "https://www.formula1.com/en/results.html/2022/races/1125/saudi-arabia/race-result.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
 
-rezultati = juha11.find("table", attrs={"class": "resultsarchive-table"})
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
 
 with open("saudiArabia2022.csv", "w", encoding="utf8") as dat:
     print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
@@ -119,32 +119,32 @@ with open("saudiArabia2022.csv", "w", encoding="utf8") as dat:
         tocke = vrstica[10]
         print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
 
-##### ne dela prou
-# url8 = "https://www.formula1.com/en/results.html/2022/races/1108/australia/race-result.htmll"
-# odgovor8 = requests.get(url8) 
-# juha8 = bs4.BeautifulSoup(odgovor8.content)
 
-# rezultati = juha8.find("table", attrs={"class": "resultsarchive-table"})
+url8 = "https://www.formula1.com/en/results.html/2022/races/1108/australia/race-result.html"
+odgovor8 = requests.get(url8) 
+juha8 = bs4.BeautifulSoup(odgovor8.content)
 
-# with open("australia2022.csv", "w", encoding="utf8") as dat:
-#     print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
-#     for rezultat in rezultati.find_all("tr")[1:]:
-#         vrstica = rezultat.text.strip().split('\n')
-#         mesto = vrstica[0]
-#         st_avtomobila = vrstica[1]
-#         voznik = vrstica[3] + ' ' + vrstica[4]
-#         ekipa = vrstica[7]
-#         st_krogov = vrstica[8]
-#         cas = vrstica[9]
-#         tocke = vrstica[10]
-#         print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
+rezultati = juha8.find("table", attrs={"class": "resultsarchive-table"})
 
-### naprej
-url11 = "https://www.formula1.com/en/results.html/2022/races/1126/azerbaijan/race-result.html"
-odgovor11 = requests.get(url11) 
-juha11 = bs4.BeautifulSoup(odgovor11.content)
+with open("australia2022.csv", "w", encoding="utf8") as dat:
+    print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
+    for rezultat in rezultati.find_all("tr")[1:]:
+        vrstica = rezultat.text.strip().split('\n')
+        mesto = vrstica[0]
+        st_avtomobila = vrstica[1]
+        voznik = vrstica[3] + ' ' + vrstica[4]
+        ekipa = vrstica[7]
+        st_krogov = vrstica[8]
+        cas = vrstica[9]
+        tocke = vrstica[10]
+        print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
 
-rezultati = juha11.find("table", attrs={"class": "resultsarchive-table"})
+
+url17 = "https://www.formula1.com/en/results.html/2022/races/1126/azerbaijan/race-result.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
+
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
 
 with open("azerbaijan2022.csv", "w", encoding="utf8") as dat:
     print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
@@ -159,11 +159,11 @@ with open("azerbaijan2022.csv", "w", encoding="utf8") as dat:
         tocke = vrstica[10]
         print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
 
-url11 = "https://www.formula1.com/en/results.html/2021/races/1064/bahrain/race-result.html"
-odgovor11 = requests.get(url11) 
-juha11 = bs4.BeautifulSoup(odgovor11.content)
+url17 = "https://www.formula1.com/en/results.html/2021/races/1064/bahrain/race-result.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
 
-rezultati = juha11.find("table", attrs={"class": "resultsarchive-table"})
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
 
 with open("bahrain2021.csv", "w", encoding="utf8") as dat:
     print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
@@ -178,11 +178,11 @@ with open("bahrain2021.csv", "w", encoding="utf8") as dat:
         tocke = vrstica[10]
         print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
 
-url11 = "https://www.formula1.com/en/results.html/2021/races/1106/saudi-arabia/race-result.html"
-odgovor11 = requests.get(url11) 
-juha11 = bs4.BeautifulSoup(odgovor11.content)
+url17 = "https://www.formula1.com/en/results.html/2021/races/1106/saudi-arabia/race-result.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
 
-rezultati = juha11.find("table", attrs={"class": "resultsarchive-table"})
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
 
 with open("saudiArabia2021.csv", "w", encoding="utf8") as dat:
     print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
@@ -198,11 +198,11 @@ with open("saudiArabia2021.csv", "w", encoding="utf8") as dat:
         print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
 
 
-url11 = "https://www.formula1.com/en/results.html/2021/races/1068/azerbaijan/race-result.html"
-odgovor11 = requests.get(url11) 
-juha11 = bs4.BeautifulSoup(odgovor11.content)
+url17 = "https://www.formula1.com/en/results.html/2021/races/1068/azerbaijan/race-result.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
 
-rezultati = juha11.find("table", attrs={"class": "resultsarchive-table"})
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
 
 with open("azerbaijan2021.csv", "w", encoding="utf8") as dat:
     print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
@@ -216,3 +216,91 @@ with open("azerbaijan2021.csv", "w", encoding="utf8") as dat:
         cas = vrstica[9]
         tocke = vrstica[10]
         print(f"{mesto},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
+
+
+url17 = "https://www.formula1.com/en/results.html/2023/drivers.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
+
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
+
+with open("vozniki2023.csv", "w", encoding="utf8") as dat:
+    print("mesto,voznik", file=dat)
+    for rezultat in rezultati.find_all("tr")[1:]:
+        vrstica = rezultat.text.strip().split('\n')
+        mesto = vrstica[0]
+        voznik = vrstica[3] + ' ' + vrstica[4]
+        print(f"{mesto},{voznik}", file=dat)
+    
+url17 = "https://www.formula1.com/en/results.html/2022/drivers.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
+
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
+
+with open("vozniki2022.csv", "w", encoding="utf8") as dat:
+    print("mesto,voznik", file=dat)
+    for rezultat in rezultati.find_all("tr")[1:]:
+        vrstica = rezultat.text.strip().split('\n')
+        mesto = vrstica[0]
+        voznik = vrstica[3] + ' ' + vrstica[4]
+        print(f"{mesto},{voznik}", file=dat)
+
+
+url17 = "https://www.formula1.com/en/results.html/2021/drivers.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
+
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
+
+with open("vozniki2021.csv", "w", encoding="utf8") as dat:
+    print("mesto,voznik", file=dat)
+    for rezultat in rezultati.find_all("tr")[1:]:
+        vrstica = rezultat.text.strip().split('\n')
+        mesto = vrstica[0]
+        voznik = vrstica[3] + ' ' + vrstica[4]
+        print(f"{mesto},{voznik}", file=dat)
+
+
+url17 = "https://www.formula1.com/en/results.html/2021/team.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
+
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
+
+with open("ekipe2021.csv", "w", encoding="utf8") as dat:
+    print("ekipa", file=dat)
+    for rezultat in rezultati.find_all("tr")[1:]:
+        vrstica = rezultat.text.strip().split('\n')
+        ekipa = vrstica[2]
+        print(f"{ekipa}", file=dat)
+
+
+url17 = "https://www.formula1.com/en/results.html/2022/team.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
+
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
+
+with open("ekipe2022.csv", "w", encoding="utf8") as dat:
+    print("ekipa", file=dat)
+    for rezultat in rezultati.find_all("tr")[1:]:
+        vrstica = rezultat.text.strip().split('\n')
+        ekipa = vrstica[2]
+        print(f"{ekipa}", file=dat)
+
+
+url17 = "https://www.formula1.com/en/results.html/2023/team.html"
+odgovor17 = requests.get(url17) 
+juha17 = bs4.BeautifulSoup(odgovor17.content)
+
+rezultati = juha17.find("table", attrs={"class": "resultsarchive-table"})
+
+with open("ekipe2023.csv", "w", encoding="utf8") as dat:
+    print("ekipa", file=dat)
+    for rezultat in rezultati.find_all("tr")[1:]:
+        vrstica = rezultat.text.strip().split('\n')
+        ekipa = vrstica[2]
+        print(f"{ekipa}", file=dat)
+
+
