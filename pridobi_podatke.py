@@ -20,8 +20,7 @@ def poberi_podatke(url):
 
     # zapis v datoteko "podatki.csv"
     with open("podatki.csv", "a", encoding="utf8") as dat:
-        print(f"\n@ {lokacija[0]}, {lokacija[1]}, {datum[0]}, {datum[1]}, {datum[2]}", file=dat)
-        print("mesto,st_avtomobila,voznik,ekipa,st_krogov,cas,tocke", file=dat)
+        print(f"@,{lokacija[0]}, {lokacija[1]}, {datum[0]}, {datum[1]}, {datum[2]}", file=dat)
         for rezultat in rezultati.find_all("tr")[1:]:
             vrstica = rezultat.text.strip().split('\n')
             mesto = vrstica[0]
@@ -31,7 +30,7 @@ def poberi_podatke(url):
             st_krogov = vrstica[8]
             cas = vrstica[9]
             tocke = vrstica[10]
-            print(f"{mesto.replace('NC', '0')},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
+            print(f"{mesto.replace('NC', '0')},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas.replace('DNF', 'None')},{tocke}", file=dat)
 
 
 

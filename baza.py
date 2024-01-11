@@ -1,4 +1,5 @@
 import csv
+import sqlite3
 
 PARAM_FMT = ":{}" # za SQLite
 # PARAM_FMT = "%s({})" # za PostgreSQL/MySQL
@@ -34,21 +35,6 @@ class Tabela:
         """
         self.conn.execute(f"DROP TABLE IF EXISTS {self.ime};")
 
-    def uvozi(self, encoding="UTF-8"):
-        """
-        Metoda za uvoz podatkov.
-
-        Argumenti:
-        - encoding: kodiranje znakov
-        """
-        if self.podatki is None:
-            return
-        with open(self.podatki, encoding=encoding) as datoteka:
-            podatki = csv.reader(datoteka)
-            stolpci = next(podatki)
-            for vrstica in podatki:
-                vrstica = {k: None if v == "" else v for k, v in zip(stolpci, vrstica)}
-                self.dodaj_vrstico(**vrstica)
 
     def izprazni(self):
         """
@@ -157,7 +143,7 @@ class Dirka(Tabela):
             CREATE TABLE dirka (
                 id        INTEGER PRIMARY KEY AUTOINCREMENT REFERENCES rezultat(dirka_id),
                 ime       TEXT,
-                sezona    INTEGER,
+                datum     DATE,
                 proga_id  INTEGER
             )
         """)
@@ -177,8 +163,7 @@ class Proga(Tabela):
             CREATE TABLE proga (
                 id        INTEGER PRIMARY KEY AUTOINCREMENT REFERENCES dirka(proga_id),
                 ime       TEXT,
-                lokacija  TEXT,
-                drzava    TEXT
+                lokacija  TEXT
             )
         """)
 
@@ -230,8 +215,12 @@ def pripravi_tabele(conn):
     """
     Pripravi objekte za tabele.
     """
-    oblacilo = Oblacilo(conn)
-    return [oblacilo]
+    rezultat = Rezultat(conn)
+    voznik = Voznik(conn)
+    ekipa = Ekipa(conn)
+    dirka = Dirka(conn)
+    proga = Proga(conn)
+    return [rezultat, voznik, ekipa, dirka, proga]
 
 
 def ustvari_bazo_ce_ne_obstaja(conn):
@@ -240,5 +229,44 @@ def ustvari_bazo_ce_ne_obstaja(conn):
     """
     with conn:
         cur = conn.execute("SELECT COUNT(*) FROM sqlite_master")
-        if cur.fetchone() == (0, ):
-            ustvari_bazo(conn)
+        #if cur.fetchone() == (0, ):
+        ustvari_bazo(conn)
+        
+def uvozi_podatke(datoteka, conn):
+    """uvozi vse podatke iz datoteke"""
+    ustvari_bazo(conn)
+    with open(datoteka, "r", encoding="utf-8") as dat:
+        kraj = ""
+        datum = ""
+        proga = ""
+        proga_id = -1
+        for vrstica in dat:
+            podatki = vrstica.split(",")
+            if podatki[0] == "@":
+                proga = podatki[1]
+                kraj = podatki[2]
+                datum = podatki[3:]
+                proga_id = conn.execute(f"SELECT id FROM proga WHERE ime= :ime", {"ime" : proga}).fetchone()
+                if proga_id is None:
+                    conn.execute(f"INSERT INTO proga (ime, lokacija) VALUES (:ime, :lokacija)", {"ime" : proga, "lokacija" : kraj})
+                    proga_id = conn.execute(f"SELECT id FROM proga WHERE ime= :ime", {"ime" : proga, "lokacija" : kraj})
+            else:
+                mesto, st_avtomobila, voznik, ekipa, st_krogov, cas, tocke = podatki
+                ime, priimek = voznik.split(" ")
+                voznik_id = conn.execute(f"SELECT id FROM voznik WHERE ime= :ime AND priimek = :priimek", {"ime" : ime, "priimek" : priimek}).fetchone()
+                if voznik_id is None:
+                    conn.execute(f"INSERT INTO voznik (ime, priimek) VALUES (:ime, :priimek)", {"ime" : ime, "priimek" : priimek})
+                    voznik_id = conn.execute(f"SELECT id FROM voznik WHERE ime= :ime AND priimek = :priimek", {"ime" : ime, "priimek" : priimek})
+                
+                ekipa_id = conn.execute(f"SELECT id FROM ekipa WHERE ime= :ime", {"ime" : ekipa}).fetchone()
+                if ekipa_id is None:
+                    conn.execute(f"INSERT INTO ekipa (ime) VALUES (:ime)", {"ime" : ekipa})
+                    ekipa_id = conn.execute(f"SELECT id FROM ekipa WHERE ime= :ime", {"ime" : ekipa})
+            
+                
+                
+                
+                            
+conn = sqlite3.connect("baza.db")
+ustvari_bazo_ce_ne_obstaja(conn)
+conn.execute("SELECT * FROM rezultat")
