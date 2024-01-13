@@ -81,12 +81,14 @@ class Rezultat(Tabela):
         """
         self.conn.execute("""
             CREATE TABLE rezultat (
-                id        INTEGER PRIMARY KEY AUTOINCREMENT,
-                dirka_id  INTEGER,
-                voznik_id INTEGER,
-                ekipa_id  INTEGER,
-                mesto     INTEGER,
-                tocke     INTEGER
+                id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                dirka_id      INTEGER,
+                voznik_id     INTEGER,
+                ekipa_id      INTEGER,
+                mesto         INTEGER,
+                tocke         INTEGER,
+                st_krogov     INTEGER,
+                st_avtomobila INTEGER
             )
         """)
 
@@ -141,10 +143,11 @@ class Dirka(Tabela):
         """
         self.conn.execute("""
             CREATE TABLE dirka (
-                id        INTEGER PRIMARY KEY AUTOINCREMENT REFERENCES rezultat(dirka_id),
-                ime       TEXT,
-                datum     DATE,
-                proga_id  INTEGER
+                id              INTEGER PRIMARY KEY AUTOINCREMENT REFERENCES rezultat(dirka_id),
+                ime             TEXT,
+                datum           DATE,
+                proga_id        INTEGER,
+                najhitrejsi_cas INTEGER  
             )
         """)
 
@@ -240,16 +243,19 @@ def uvozi_podatke(datoteka, conn):
         datum = ""
         proga = ""
         proga_id = -1
+        dirka_id = -1
         for vrstica in dat:
             podatki = vrstica.split(",")
             if podatki[0] == "@":
                 proga = podatki[1]
                 kraj = podatki[2]
                 datum = podatki[3:]
+
                 proga_id = conn.execute(f"SELECT id FROM proga WHERE ime= :ime", {"ime" : proga}).fetchone()
                 if proga_id is None:
                     conn.execute(f"INSERT INTO proga (ime, lokacija) VALUES (:ime, :lokacija)", {"ime" : proga, "lokacija" : kraj})
-                    proga_id = conn.execute(f"SELECT id FROM proga WHERE ime= :ime", {"ime" : proga, "lokacija" : kraj})
+                    proga_id = conn.execute(f"SELECT id FROM proga WHERE ime= :ime AND lokacija= :lokacija", {"ime" : proga, "lokacija" : kraj})
+                
             else:
                 mesto, st_avtomobila, voznik, ekipa, st_krogov, cas, tocke = podatki
                 ime, priimek = voznik.split(" ")
@@ -262,9 +268,15 @@ def uvozi_podatke(datoteka, conn):
                 if ekipa_id is None:
                     conn.execute(f"INSERT INTO ekipa (ime) VALUES (:ime)", {"ime" : ekipa})
                     ekipa_id = conn.execute(f"SELECT id FROM ekipa WHERE ime= :ime", {"ime" : ekipa})
-            
+
+                dirka_id = conn.execute(f"SELECT id FROM dirka WHERE ime= :ime", {"ime" : proga}).fetchone()
+                if dirka_id is None:
+                    conn.execute(f"INSERT INTO dirka (ime, datum, proga_id, najhitrejsi_cas) VALUES (:ime, :datum, :proga_id, :najhitrejsi_cas)", {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas})
+                    dirka_id = conn.execute(f"SELECT id FROM dirka WHERE ime= :ime", {"ime" : proga})
                 
-                
+                conn.execute(f"INSERT INTO rezultat (dirka_id, voznik_id, ekipa_id, mesto, tocke, st_krogov, st_avtomobila)
+                              VALUES (:dirka_id,, :voznik_id, :ekipa_id, :mesto, :tocke, :st_krogov, :st_avtomobila)",
+                              {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila})
                 
                             
 conn = sqlite3.connect("baza.db")

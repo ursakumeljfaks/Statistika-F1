@@ -1,6 +1,14 @@
 import requests
 import bs4
+import re
 
+def pretvori_cas(cas):
+    niz = re.match(r'(\d+):(\d+):(\d+)', cas)
+    if niz:
+        h, min, s = map(int, niz.groups())
+        return h * 3600 + min * 60 + s
+    else:
+        return 0
 
 def poberi_podatke(url):
     '''pridobi podatke o datumu, lokaciji in rezultatih tekme. To zapiše v datoteko "podatki.csv"'''
@@ -28,9 +36,9 @@ def poberi_podatke(url):
             voznik = vrstica[3] + ' ' + vrstica[4]
             ekipa = vrstica[7]
             st_krogov = vrstica[8]
-            cas = vrstica[9]
+            cas = pretvori_cas(vrstica[9])
             tocke = vrstica[10]
-            print(f"{mesto.replace('NC', '0')},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas.replace('DNF', 'None')},{tocke}", file=dat)
+            print(f"{mesto.replace('NC', '0')},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
 
 
 
