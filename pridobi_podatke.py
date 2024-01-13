@@ -7,8 +7,6 @@ def pretvori_cas(cas):
     if niz:
         h, min, s = map(int, niz.groups())
         return h * 3600 + min * 60 + s
-    else:
-        return 0
 
 def poberi_podatke(url):
     '''pridobi podatke o datumu, lokaciji in rezultatih tekme. To zapiše v datoteko "podatki.csv"'''
@@ -29,16 +27,17 @@ def poberi_podatke(url):
     # zapis v datoteko "podatki.csv"
     with open("podatki.csv", "a", encoding="utf8") as dat:
         print(f"@,{lokacija[0]}, {lokacija[1]}, {datum[0]}, {datum[1]}, {datum[2]}", file=dat)
-        for rezultat in rezultati.find_all("tr")[1:]:
+        prva_vrstica = rezultati.find_all("tr")[1].text.strip().split("\n")
+        print(f"{prva_vrstica[0]},{prva_vrstica[1]},{prva_vrstica[4] + ' ' + prva_vrstica[4]},{prva_vrstica[7]},{prva_vrstica[8]},{pretvori_cas(prva_vrstica[9])},{prva_vrstica[10]}", file=dat)
+        for rezultat in rezultati.find_all("tr")[2:]:
             vrstica = rezultat.text.strip().split('\n')
             mesto = vrstica[0]
             st_avtomobila = vrstica[1]
             voznik = vrstica[3] + ' ' + vrstica[4]
             ekipa = vrstica[7]
             st_krogov = vrstica[8]
-            cas = pretvori_cas(vrstica[9])
             tocke = vrstica[10]
-            print(f"{mesto.replace('NC', '0')},{st_avtomobila},{voznik},{ekipa},{st_krogov},{cas},{tocke}", file=dat)
+            print(f"{mesto.replace('NC', '0')},{st_avtomobila},{voznik},{ekipa},{st_krogov},{tocke}", file=dat)
 
 
 

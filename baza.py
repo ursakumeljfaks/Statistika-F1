@@ -255,9 +255,14 @@ def uvozi_podatke(datoteka, conn):
                 if proga_id is None:
                     conn.execute(f"INSERT INTO proga (ime, lokacija) VALUES (:ime, :lokacija)", {"ime" : proga, "lokacija" : kraj})
                     proga_id = conn.execute(f"SELECT id FROM proga WHERE ime= :ime AND lokacija= :lokacija", {"ime" : proga, "lokacija" : kraj})
-                
-            else:
+            elif podatki[0] == 1:
                 mesto, st_avtomobila, voznik, ekipa, st_krogov, cas, tocke = podatki
+                
+                dirka_id = conn.execute(f"SELECT id FROM dirka WHERE ime= :ime", {"ime" : proga}).fetchone()
+                if dirka_id is None:
+                    conn.execute(f"INSERT INTO dirka (ime, datum, proga_id, najhitrejsi_cas) VALUES (:ime, :datum, :proga_id, :najhitrejsi_cas)", {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas})
+                    dirka_id = conn.execute(f"SELECT id FROM dirka WHERE ime= :ime", {"ime" : proga})
+
                 ime, priimek = voznik.split(" ")
                 voznik_id = conn.execute(f"SELECT id FROM voznik WHERE ime= :ime AND priimek = :priimek", {"ime" : ime, "priimek" : priimek}).fetchone()
                 if voznik_id is None:
@@ -269,11 +274,23 @@ def uvozi_podatke(datoteka, conn):
                     conn.execute(f"INSERT INTO ekipa (ime) VALUES (:ime)", {"ime" : ekipa})
                     ekipa_id = conn.execute(f"SELECT id FROM ekipa WHERE ime= :ime", {"ime" : ekipa})
 
-                dirka_id = conn.execute(f"SELECT id FROM dirka WHERE ime= :ime", {"ime" : proga}).fetchone()
-                if dirka_id is None:
-                    conn.execute(f"INSERT INTO dirka (ime, datum, proga_id, najhitrejsi_cas) VALUES (:ime, :datum, :proga_id, :najhitrejsi_cas)", {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas})
-                    dirka_id = conn.execute(f"SELECT id FROM dirka WHERE ime= :ime", {"ime" : proga})
+                conn.execute(f"INSERT INTO rezultat (dirka_id, voznik_id, ekipa_id, mesto, tocke, st_krogov, st_avtomobila)
+                              VALUES (:dirka_id,, :voznik_id, :ekipa_id, :mesto, :tocke, :st_krogov, :st_avtomobila)",
+                              {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila})
                 
+            else:
+                mesto, st_avtomobila, voznik, ekipa, st_krogov, tocke = podatki
+                ime, priimek = voznik.split(" ")
+                voznik_id = conn.execute(f"SELECT id FROM voznik WHERE ime= :ime AND priimek = :priimek", {"ime" : ime, "priimek" : priimek}).fetchone()
+                if voznik_id is None:
+                    conn.execute(f"INSERT INTO voznik (ime, priimek) VALUES (:ime, :priimek)", {"ime" : ime, "priimek" : priimek})
+                    voznik_id = conn.execute(f"SELECT id FROM voznik WHERE ime= :ime AND priimek = :priimek", {"ime" : ime, "priimek" : priimek})
+                
+                ekipa_id = conn.execute(f"SELECT id FROM ekipa WHERE ime= :ime", {"ime" : ekipa}).fetchone()
+                if ekipa_id is None:
+                    conn.execute(f"INSERT INTO ekipa (ime) VALUES (:ime)", {"ime" : ekipa})
+                    ekipa_id = conn.execute(f"SELECT id FROM ekipa WHERE ime= :ime", {"ime" : ekipa})
+
                 conn.execute(f"INSERT INTO rezultat (dirka_id, voznik_id, ekipa_id, mesto, tocke, st_krogov, st_avtomobila)
                               VALUES (:dirka_id,, :voznik_id, :ekipa_id, :mesto, :tocke, :st_krogov, :st_avtomobila)",
                               {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila})
