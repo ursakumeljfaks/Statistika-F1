@@ -28,7 +28,7 @@ def poberi_podatke(url):
     with open("podatki.csv", "a", encoding="utf8") as dat:
         print(f"@,{lokacija[0]}, {lokacija[1]}, {datum[0]}, {datum[1]}, {datum[2]}", file=dat)
         prva_vrstica = rezultati.find_all("tr")[1].text.strip().split("\n")
-        print(f"{prva_vrstica[0]},{prva_vrstica[1]},{prva_vrstica[4] + ' ' + prva_vrstica[4]},{prva_vrstica[7]},{prva_vrstica[8]},{pretvori_cas(prva_vrstica[9])},{prva_vrstica[10]}", file=dat)
+        print(f"{prva_vrstica[0]},{prva_vrstica[1]},{prva_vrstica[3] + ' ' + prva_vrstica[4]},{prva_vrstica[7]},{prva_vrstica[8]},{pretvori_cas(prva_vrstica[9])},{prva_vrstica[10]}", file=dat)
         for rezultat in rezultati.find_all("tr")[2:]:
             vrstica = rezultat.text.strip().split('\n')
             mesto = vrstica[0]

@@ -66,6 +66,7 @@ class Tabela:
         poizvedba = self.dodajanje(podatki.keys())
         cur = self.conn.execute(poizvedba, podatki)
         return cur.lastrowid
+    
 
 
 class Rezultat(Tabela):
@@ -89,7 +90,7 @@ class Rezultat(Tabela):
                 tocke         INTEGER,
                 st_krogov     INTEGER,
                 st_avtomobila INTEGER
-            )
+            );
         """)
 
 
@@ -109,7 +110,7 @@ class Voznik(Tabela):
                 id        INTEGER PRIMARY KEY AUTOINCREMENT REFERENCES rezultat(voznik_id),
                 ime       TEXT,
                 priimek   TEXT
-            )
+            );
         """)
 
 class Ekipa(Tabela):
@@ -127,7 +128,7 @@ class Ekipa(Tabela):
             CREATE TABLE ekipa (
                 id        INTEGER PRIMARY KEY AUTOINCREMENT REFERENCES rezultat(ekipa_id),
                 ime       TEXT
-            )
+            );
         """)
 
 class Dirka(Tabela):
@@ -148,7 +149,7 @@ class Dirka(Tabela):
                 datum           DATE,
                 proga_id        INTEGER,
                 najhitrejsi_cas INTEGER  
-            )
+            );
         """)
 
 class Proga(Tabela):
@@ -167,7 +168,7 @@ class Proga(Tabela):
                 id        INTEGER PRIMARY KEY AUTOINCREMENT REFERENCES dirka(proga_id),
                 ime       TEXT,
                 lokacija  TEXT
-            )
+            );
         """)
 
 
@@ -187,13 +188,13 @@ def izbrisi_tabele(tabele):
         t.izbrisi()
 
 
-def uvozi_podatke(tabele):
-    """
-    Uvozi podatke v podane tabele.
-    """
-    for t in tabele:
-        print("uvozi v tabelo", t.ime)
-        t.uvozi()
+# def uvozi_podatke(tabele):
+#     """
+#     Uvozi podatke v podane tabele.
+#     """
+#     for t in tabele:
+#         print("uvozi v tabelo", t.ime)
+#         t.uvozi()
 
 
 def izprazni_tabele(tabele):
@@ -235,10 +236,9 @@ def ustvari_bazo_ce_ne_obstaja(conn):
         #if cur.fetchone() == (0, ):
         ustvari_bazo(conn)
         
-def uvozi_podatke(datoteka, conn):
+def uvozi_podatke(conn):
     """uvozi vse podatke iz datoteke"""
-    ustvari_bazo(conn)
-    with open(datoteka, "r", encoding="utf-8") as dat:
+    with open("podatki.csv", "r", encoding="utf-8") as dat:
         kraj = ""
         datum = ""
         proga = ""
