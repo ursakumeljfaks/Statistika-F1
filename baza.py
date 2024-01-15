@@ -76,6 +76,10 @@ class Rezultat(Tabela):
     ime = "rezultat"
     podatki = "podatki.csv"
 
+    def __init__(self, conn, rezultat):
+        super().__init__(conn)
+        self.rezultat = rezultat
+
     def ustvari(self):
         """
         Ustvari tabelo rezultat.
@@ -92,7 +96,9 @@ class Rezultat(Tabela):
                 st_avtomobila INTEGER
             );
         """)
-
+    
+    def dodaj_vrstico(self, **podatki):
+        return super().dodaj_vrstico(**podatki)
 
 class Voznik(Tabela):
     """
@@ -100,6 +106,10 @@ class Voznik(Tabela):
     """
     ime = "voznik"
     podatki = "podatki.csv"
+
+    def __init__(self, conn, voznik):
+        super().__init__(conn)
+        self.voznik = voznik
 
     def ustvari(self):
         """
@@ -113,12 +123,25 @@ class Voznik(Tabela):
             );
         """)
 
+    def dodaj_vrstico(self, **podatki):
+        assert "ime", "priimek" in podatki
+        rez = self.conn.execute("SELECT id FROM voznik WHERE ime= :ime AND priimek = :priimek", podatki).fetchone()
+        if rez is None:
+            return super().dodaj_vrstico(**podatki)
+        else:
+            id, = podatki
+            return id
+
 class Ekipa(Tabela):
     """
     Tabela za ekipe.
     """
     ime = "ekipa"
     podatki = "podatki.csv"
+
+    def __init__(self, conn, ekipa):
+        super().__init__(conn)
+        self.ekipa = ekipa
 
     def ustvari(self):
         """
@@ -131,12 +154,25 @@ class Ekipa(Tabela):
             );
         """)
 
+    def dodaj_vrstico(self, **podatki):
+        assert "ime" in podatki
+        rez = self.conn.execute("SELECT id FROM ekipa WHERE ime= :ime", podatki).fetchone()
+        if rez is None:
+            return super().dodaj_vrstico(**podatki)
+        else:
+            id, = rez
+            return id
+
 class Dirka(Tabela):
     """
     Tabela za dirke.
     """
     ime = "dirka"
     podatki = "podatki.csv"
+
+    def __init__(self, conn, dirka):
+        super().__init__(conn)
+        self.dirka = dirka
 
     def ustvari(self):
         """
@@ -152,12 +188,25 @@ class Dirka(Tabela):
             );
         """)
 
+    def dodaj_vrstico(self, **podatki):
+        assert "ime" in podatki
+        rez = self.conn.execute("SELECT id FROM dirka WHERE ime= :ime", podatki).fetchone()
+        if rez is None:
+            return super().dodaj_vrstico(**podatki)
+        else:
+            id, = podatki
+            return id
+
 class Proga(Tabela):
     """
     Tabela za proge.
     """
     ime = "proga"
     podatki = "podatki.csv"
+
+    def __init__(self, conn, proga):
+        super().__init__(conn)
+        self.proga = proga
 
     def ustvari(self):
         """
@@ -170,6 +219,15 @@ class Proga(Tabela):
                 lokacija  TEXT
             );
         """)
+    
+    def dodaj_vrstico(self, **podatki):
+        assert "ime" in podatki
+        rez = self.conn.execute("SELECT id FROM proga WHERE ime= :ime", podatki).fetchone()
+        if rez is None:
+            return super().dodaj_vrstico(**podatki)
+        else:
+            id, = podatki
+            return id
 
 
 def ustvari_tabele(tabele):
@@ -236,14 +294,19 @@ def ustvari_bazo_ce_ne_obstaja(conn):
         #if cur.fetchone() == (0, ):
         ustvari_bazo(conn)
         
-def uvozi_podatke(conn):
+def uvozi_podatke(tabele):
     """uvozi vse podatke iz datoteke"""
+
+    rezultat_tabela = tabele[0]
+    voznik_tabela = tabele[1]
+    ekipa_tabela = tabele[2]
+    dirka_tabela = tabele[3]
+    proga_tabela = tabele[4]
+
     with open("podatki.csv", "r", encoding="utf-8") as dat:
         kraj = ""
         datum = ""
         proga = ""
-        proga_id = -1
-        dirka_id = -1
         for vrstica in dat:
             podatki = vrstica.split(",")
             if podatki[0] == "@":
@@ -251,38 +314,36 @@ def uvozi_podatke(conn):
                 kraj = podatki[2]
                 datum = podatki[3:]
 
-                proga_id = conn.execute("SELECT id FROM proga WHERE ime= :ime", {"ime" : proga}).fetchone()
-                if proga_id is None:
-                    conn.execute("INSERT INTO proga (ime, lokacija) VALUES (:ime, :lokacija)", {"ime" : proga, "lokacija" : kraj})
-                    proga_id = conn.execute("SELECT id FROM proga WHERE ime= :ime AND lokacija= :lokacija", {"ime" : proga, "lokacija" : kraj})
-            
+                podatki_proga = {"ime" : proga, "lokacija" : kraj}
+                proga_tabela.dodaj_vrstico(podatki_proga)
+
             else:
 
                 if podatki[0] == 1:
                     mesto, st_avtomobila, voznik, ekipa, st_krogov, cas, tocke = podatki
+
+                    proga_id = proga_tabela.dodaj_vrstico(podatki_proga)
+
+                    podatki_dirka = {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas}
+                    dirka_tabela.dodaj_vrstico(podatki_dirka)
                     
-                    dirka_id = conn.execute("SELECT id FROM dirka WHERE ime= :ime", {"ime" : proga}).fetchone()
-                    if dirka_id is None:
-                        conn.execute("INSERT INTO dirka (ime, datum, proga_id, najhitrejsi_cas) VALUES (:ime, :datum, :proga_id, :najhitrejsi_cas)", {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas})
-                        dirka_id = conn.execute("SELECT id FROM dirka WHERE ime= :ime", {"ime" : proga})
-                
                 mesto, st_avtomobila, voznik, ekipa, st_krogov, tocke = podatki
                 ime, priimek = voznik.split(" ")
-                voznik_id = conn.execute("SELECT id FROM voznik WHERE ime= :ime AND priimek = :priimek", {"ime" : ime, "priimek" : priimek}).fetchone()
-                if voznik_id is None:
-                    conn.execute("INSERT INTO voznik (ime, priimek) VALUES (:ime, :priimek)", {"ime" : ime, "priimek" : priimek})
-                    voznik_id = conn.execute("SELECT id FROM voznik WHERE ime= :ime AND priimek = :priimek", {"ime" : ime, "priimek" : priimek})
-                
-                ekipa_id = conn.execute("SELECT id FROM ekipa WHERE ime= :ime", {"ime" : ekipa}).fetchone()
-                if ekipa_id is None:
-                    conn.execute("INSERT INTO ekipa (ime) VALUES (:ime)", {"ime" : ekipa})
-                    ekipa_id = conn.execute("SELECT id FROM ekipa WHERE ime= :ime", {"ime" : ekipa})
 
-                conn.execute("""INSERT INTO rezultat (dirka_id, voznik_id, ekipa_id, mesto, tocke, st_krogov, st_avtomobila)
-                              VALUES (:dirka_id,, :voznik_id, :ekipa_id, :mesto, :tocke, :st_krogov, :st_avtomobila)""",
-                              {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila})
+                podatki_voznik = {"ime" : ime, "priimek" : priimek}
+                voznik_tabela.dodaj_vrstico(podatki_voznik)
                 
-                            
+                podatki_ekipa = {"ime" : ekipa}
+                ekipa_tabela.dodaj_vrstico(podatki_ekipa)
+
+                ekipa_id = ekipa_tabela.dodaj_vrstico(podatki_ekipa)
+                dirka_id = dirka_tabela.dodaj_vrstico(podatki_dirka)
+                voznik_id = voznik_tabela.dodaj_vrstico(podatki_voznik)
+
+                podatki_rezultat = {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila}
+                rezultat_tabela.dodaj_vrstico(podatki_rezultat)
+                
+
 conn = sqlite3.connect("baza.db")
 ustvari_bazo_ce_ne_obstaja(conn)
 conn.execute("SELECT * FROM rezultat")
