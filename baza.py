@@ -76,9 +76,9 @@ class Rezultat(Tabela):
     ime = "rezultat"
     podatki = "podatki.csv"
 
-    def __init__(self, conn, rezultat):
-        super().__init__(conn)
-        self.rezultat = rezultat
+    # def __init__(self, conn, rezultat):
+    #     super().__init__(conn)
+    #     self.rezultat = rezultat
 
     def ustvari(self):
         """
@@ -107,9 +107,9 @@ class Voznik(Tabela):
     ime = "voznik"
     podatki = "podatki.csv"
 
-    def __init__(self, conn, voznik):
-        super().__init__(conn)
-        self.voznik = voznik
+    # def __init__(self, conn, voznik):
+    #     super().__init__(conn)
+    #     self.voznik = voznik
 
     def ustvari(self):
         """
@@ -129,7 +129,7 @@ class Voznik(Tabela):
         if rez is None:
             return super().dodaj_vrstico(**podatki)
         else:
-            id, = podatki
+            id, = rez
             return id
 
 class Ekipa(Tabela):
@@ -139,9 +139,9 @@ class Ekipa(Tabela):
     ime = "ekipa"
     podatki = "podatki.csv"
 
-    def __init__(self, conn, ekipa):
-        super().__init__(conn)
-        self.ekipa = ekipa
+    # def __init__(self, conn, ekipa):
+    #     super().__init__(conn)
+    #     self.ekipa = ekipa
 
     def ustvari(self):
         """
@@ -170,9 +170,9 @@ class Dirka(Tabela):
     ime = "dirka"
     podatki = "podatki.csv"
 
-    def __init__(self, conn, dirka):
-        super().__init__(conn)
-        self.dirka = dirka
+    # def __init__(self, conn, dirka):
+    #     super().__init__(conn)
+    #     self.dirka = dirka
 
     def ustvari(self):
         """
@@ -194,7 +194,7 @@ class Dirka(Tabela):
         if rez is None:
             return super().dodaj_vrstico(**podatki)
         else:
-            id, = podatki
+            id, = rez
             return id
 
 class Proga(Tabela):
@@ -204,9 +204,9 @@ class Proga(Tabela):
     ime = "proga"
     podatki = "podatki.csv"
 
-    def __init__(self, conn, proga):
-        super().__init__(conn)
-        self.proga = proga
+    # def __init__(self, conn, proga):
+    #     super().__init__(conn)
+    #     self.proga = proga
 
     def ustvari(self):
         """
@@ -226,7 +226,7 @@ class Proga(Tabela):
         if rez is None:
             return super().dodaj_vrstico(**podatki)
         else:
-            id, = podatki
+            id, = rez
             return id
 
 
@@ -312,38 +312,41 @@ def uvozi_podatke(tabele):
             if podatki[0] == "@":
                 proga = podatki[1]
                 kraj = podatki[2]
-                datum = podatki[3:]
+                datum = "-".join(podatki[3:][::-1])
 
                 podatki_proga = {"ime" : proga, "lokacija" : kraj}
-                proga_tabela.dodaj_vrstico(podatki_proga)
+                proga_tabela.dodaj_vrstico(**podatki_proga)
 
             else:
 
-                if podatki[0] == 1:
+                if podatki[0] == '1':
                     mesto, st_avtomobila, voznik, ekipa, st_krogov, cas, tocke = podatki
 
-                    proga_id = proga_tabela.dodaj_vrstico(podatki_proga)
+                    proga_id = proga_tabela.dodaj_vrstico(**podatki_proga)
 
                     podatki_dirka = {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas}
-                    dirka_tabela.dodaj_vrstico(podatki_dirka)
+                    dirka_tabela.dodaj_vrstico(**podatki_dirka)
+                
+                else:
                     
-                mesto, st_avtomobila, voznik, ekipa, st_krogov, tocke = podatki
-                ime, priimek = voznik.split(" ")
+                    mesto, st_avtomobila, voznik, ekipa, st_krogov, tocke = podatki
+                    ime, priimek = voznik.split(" ", 1)
 
-                podatki_voznik = {"ime" : ime, "priimek" : priimek}
-                voznik_tabela.dodaj_vrstico(podatki_voznik)
-                
-                podatki_ekipa = {"ime" : ekipa}
-                ekipa_tabela.dodaj_vrstico(podatki_ekipa)
+                    podatki_voznik = {"ime" : ime, "priimek" : priimek}
+                    voznik_tabela.dodaj_vrstico(**podatki_voznik)
+                    
+                    podatki_ekipa = {"ime" : ekipa}
+                    ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
 
-                ekipa_id = ekipa_tabela.dodaj_vrstico(podatki_ekipa)
-                dirka_id = dirka_tabela.dodaj_vrstico(podatki_dirka)
-                voznik_id = voznik_tabela.dodaj_vrstico(podatki_voznik)
+                    ekipa_id = ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
+                    dirka_id = dirka_tabela.dodaj_vrstico(**podatki_dirka)
+                    voznik_id = voznik_tabela.dodaj_vrstico(**podatki_voznik)
 
-                podatki_rezultat = {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila}
-                rezultat_tabela.dodaj_vrstico(podatki_rezultat)
-                
-
+                    podatki_rezultat = {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila}
+                    rezultat_tabela.dodaj_vrstico(**podatki_rezultat)
+                    
+import os
+os.remove("baza.db")
 conn = sqlite3.connect("baza.db")
 ustvari_bazo_ce_ne_obstaja(conn)
 conn.execute("SELECT * FROM rezultat")
