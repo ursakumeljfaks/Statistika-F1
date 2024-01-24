@@ -326,15 +326,29 @@ def uvozi_podatke(tabele):
 
                     podatki_dirka = {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas}
                     dirka_tabela.dodaj_vrstico(**podatki_dirka)
-                
+
+                    ime, priimek = voznik.split(" ", 1)
+
+                    podatki_voznik = {"ime" : ime, "priimek" : priimek}
+                    voznik_tabela.dodaj_vrstico(**podatki_voznik)
+                        
+                    podatki_ekipa = {"ime" : ekipa}
+                    ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
+
+                    ekipa_id = ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
+                    dirka_id = dirka_tabela.dodaj_vrstico(**podatki_dirka)
+                    voznik_id = voznik_tabela.dodaj_vrstico(**podatki_voznik)
+
+                    podatki_rezultat = {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila}
+                    rezultat_tabela.dodaj_vrstico(**podatki_rezultat)
+
                 else:
-                    
                     mesto, st_avtomobila, voznik, ekipa, st_krogov, tocke = podatki
                     ime, priimek = voznik.split(" ", 1)
 
                     podatki_voznik = {"ime" : ime, "priimek" : priimek}
                     voznik_tabela.dodaj_vrstico(**podatki_voznik)
-                    
+                        
                     podatki_ekipa = {"ime" : ekipa}
                     ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
 
