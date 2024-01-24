@@ -16,17 +16,19 @@ def poberi_podatke(url):
 
     rezultati = juha1.find("table", attrs={"class": "resultsarchive-table"})
 
-    lokacija = juha1.find("span", attrs={"class": "circuit-info"}).text.strip().split(",") 
+    lokacija = juha1.find("span", attrs={"class": "circuit-info"}).text.strip().split(",")
+    lokacija[1] = lokacija[1].strip() # spredaj en presledek odvec
 
     datum = juha1.find("span", attrs={"class": "full-date"}).text.strip().split()
-    datum[0] = int(datum[0])
-    datum[1] = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].index(datum[1]) + 1
-    datum[2] = int(datum[2])
+    datum[1] = str(["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].index(datum[1]) + 1)
+    for i in range(len(datum)):
+        if len(datum[i]) == 1:
+            datum[i] = "0" + datum[i]
 
 
     # zapis v datoteko "podatki.csv"
     with open("podatki.csv", "a", encoding="utf8") as dat:
-        print(f"@,{lokacija[0]}, {lokacija[1]}, {datum[0]}, {datum[1]}, {datum[2]}", file=dat)
+        print(f"@,{lokacija[0]},{lokacija[1]},{datum[0]},{datum[1]},{datum[2]}", file=dat)
         prva_vrstica = rezultati.find_all("tr")[1].text.strip().split("\n")
         print(f"{prva_vrstica[0]},{prva_vrstica[1]},{prva_vrstica[3] + ' ' + prva_vrstica[4]},{prva_vrstica[7]},{prva_vrstica[8]},{pretvori_cas(prva_vrstica[9])},{prva_vrstica[10]}", file=dat)
         for rezultat in rezultati.find_all("tr")[2:]:
@@ -104,5 +106,4 @@ urlji = ["https://www.formula1.com/en/results.html/2023/races/1141/bahrain/race-
 
 for url in urlji:
     poberi_podatke(url)
-
 

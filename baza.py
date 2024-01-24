@@ -312,6 +312,8 @@ def uvozi_podatke(tabele):
             if podatki[0] == "@":
                 proga = podatki[1]
                 kraj = podatki[2]
+                
+                podatki[-1] = podatki[-1].strip() # pri letu na koncu en odvec preseledek
                 datum = "-".join(podatki[3:][::-1])
 
                 podatki_proga = {"ime" : proga, "lokacija" : kraj}
