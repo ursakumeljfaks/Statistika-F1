@@ -190,7 +190,7 @@ class Dirka(Tabela):
 
     def dodaj_vrstico(self, **podatki):
         assert "ime" in podatki
-        rez = self.conn.execute("SELECT id FROM dirka WHERE ime= :ime", podatki).fetchone()
+        rez = self.conn.execute("SELECT id FROM dirka WHERE ime= :ime AND datum= :datum AND proga_id= :proga_id AND najhitrejsi_cas= :najhitrejsi_cas", podatki).fetchone()
         if rez is None:
             return super().dodaj_vrstico(**podatki)
         else:
@@ -222,7 +222,7 @@ class Proga(Tabela):
     
     def dodaj_vrstico(self, **podatki):
         assert "ime" in podatki
-        rez = self.conn.execute("SELECT id FROM proga WHERE ime= :ime", podatki).fetchone()
+        rez = self.conn.execute("SELECT id FROM proga WHERE ime= :ime AND lokacija= :lokacija", podatki).fetchone()
         if rez is None:
             return super().dodaj_vrstico(**podatki)
         else:
@@ -317,7 +317,6 @@ def uvozi_podatke(tabele):
                 datum = "-".join(podatki[3:][::-1])
 
                 podatki_proga = {"ime" : proga, "lokacija" : kraj}
-                proga_tabela.dodaj_vrstico(**podatki_proga)
 
             else:
 
@@ -325,41 +324,23 @@ def uvozi_podatke(tabele):
                     mesto, st_avtomobila, voznik, ekipa, st_krogov, cas, tocke = podatki
 
                     proga_id = proga_tabela.dodaj_vrstico(**podatki_proga)
-
                     podatki_dirka = {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas}
-                    dirka_tabela.dodaj_vrstico(**podatki_dirka)
-
-                    ime, priimek = voznik.split(" ", 1)
-
-                    podatki_voznik = {"ime" : ime, "priimek" : priimek}
-                    voznik_tabela.dodaj_vrstico(**podatki_voznik)
-                        
-                    podatki_ekipa = {"ime" : ekipa}
-                    ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
-
-                    ekipa_id = ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
-                    dirka_id = dirka_tabela.dodaj_vrstico(**podatki_dirka)
-                    voznik_id = voznik_tabela.dodaj_vrstico(**podatki_voznik)
-
-                    podatki_rezultat = {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila}
-                    rezultat_tabela.dodaj_vrstico(**podatki_rezultat)
 
                 else:
                     mesto, st_avtomobila, voznik, ekipa, st_krogov, tocke = podatki
-                    ime, priimek = voznik.split(" ", 1)
+                  
+                    
+                ime, priimek = voznik.split(" ", 1)
 
-                    podatki_voznik = {"ime" : ime, "priimek" : priimek}
-                    voznik_tabela.dodaj_vrstico(**podatki_voznik)
-                        
-                    podatki_ekipa = {"ime" : ekipa}
-                    ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
+                podatki_voznik = {"ime" : ime, "priimek" : priimek}                        
+                podatki_ekipa = {"ime" : ekipa}
 
-                    ekipa_id = ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
-                    dirka_id = dirka_tabela.dodaj_vrstico(**podatki_dirka)
-                    voznik_id = voznik_tabela.dodaj_vrstico(**podatki_voznik)
+                ekipa_id = ekipa_tabela.dodaj_vrstico(**podatki_ekipa)
+                dirka_id = dirka_tabela.dodaj_vrstico(**podatki_dirka)
+                voznik_id = voznik_tabela.dodaj_vrstico(**podatki_voznik)
 
-                    podatki_rezultat = {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila}
-                    rezultat_tabela.dodaj_vrstico(**podatki_rezultat)
+                podatki_rezultat = {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila}
+                rezultat_tabela.dodaj_vrstico(**podatki_rezultat)
                     
 import os
 os.remove("baza.db")
