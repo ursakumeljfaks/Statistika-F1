@@ -181,6 +181,7 @@ class Dirka(Tabela):
         self.conn.execute("""
             CREATE TABLE dirka (
                 id              INTEGER PRIMARY KEY AUTOINCREMENT REFERENCES rezultat(dirka_id),
+                tip             TEXT,
                 ime             TEXT,
                 datum           DATE,
                 proga_id        INTEGER,
@@ -190,7 +191,7 @@ class Dirka(Tabela):
 
     def dodaj_vrstico(self, **podatki):
         assert "ime" in podatki
-        rez = self.conn.execute("SELECT id FROM dirka WHERE ime= :ime AND datum= :datum AND proga_id= :proga_id AND najhitrejsi_cas= :najhitrejsi_cas", podatki).fetchone()
+        rez = self.conn.execute("SELECT id FROM dirka WHERE tip= :tip AND ime= :ime AND datum= :datum AND proga_id= :proga_id AND najhitrejsi_cas= :najhitrejsi_cas", podatki).fetchone()
         if rez is None:
             return super().dodaj_vrstico(**podatki)
         else:
@@ -304,17 +305,20 @@ def uvozi_podatke(tabele):
     proga_tabela = tabele[4]
 
     with open("podatki.csv", "r", encoding="utf-8") as dat:
+        tip_dirke = ""
         kraj = ""
         datum = ""
         proga = ""
         for vrstica in dat:
             podatki = vrstica.split(",")
             if podatki[0] == "@":
-                proga = podatki[1]
-                kraj = podatki[2]
+                tip_dirke = podatki[1]
+                proga = podatki[2]
+                kraj = podatki[3]
                 
                 podatki[-1] = podatki[-1].strip() # pri letu na koncu en odvec preseledek
-                datum = "-".join(podatki[3:][::-1])
+                datum = "-".join(podatki[4:][::-1])
+                
 
                 podatki_proga = {"ime" : proga, "lokacija" : kraj}
 
@@ -324,7 +328,7 @@ def uvozi_podatke(tabele):
                     mesto, st_avtomobila, voznik, ekipa, st_krogov, cas, tocke = podatki
 
                     proga_id = proga_tabela.dodaj_vrstico(**podatki_proga)
-                    podatki_dirka = {"ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas}
+                    podatki_dirka = {"tip" : tip_dirke, "ime" : proga, "datum" : datum, "proga_id" : proga_id, "najhitrejsi_cas" : cas}
 
                 else:
                     mesto, st_avtomobila, voznik, ekipa, st_krogov, tocke = podatki
@@ -344,6 +348,6 @@ def uvozi_podatke(tabele):
                     
 import os
 os.remove("baza.db")
-conn = sqlite3.connect("baza.db")
-ustvari_bazo_ce_ne_obstaja(conn)
-conn.execute("SELECT * FROM rezultat")
+conn = sqlite3.connect("baza.db", timeout=10)
+#ustvari_bazo_ce_ne_obstaja(conn)
+#conn.execute("SELECT * FROM rezultat")
