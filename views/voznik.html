@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 
-    <title>Statistika F1</title>
+    <title>Vozniki</title>
   </head>
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
@@ -50,45 +50,41 @@
       </nav>
   </header>
     <body>
-        <h1 class="text-center" style="margin-top: 70px;">Dobrodošli v Statistiki Formule 1!</h1>
-
+        <h1 class="text-center" style="margin-top: 70px;">Vse o voznikih</h1>
         <div class="d-flex mt-5 justify-content-center align-items-center">
-                <div class="row g-3 justify-content-center">
-                    <div class="col-sm">
-                        <div class="text-center">
-                            <h3>Vozniki</h3>
-                            <img src="https://www.tutorialspoint.com/bootstrap/images/64.jpg" class="rounded-circle" alt="Vozniki" width="100" height="100">
-                        </div>
+            <div class="row g-3 justify-content-center">
+                <form method="POST">
+                    <div class="field">
+                          <div class="row mb-3">
+                            <label for="colFormLabel" class="col-sm-2 col-form-label">Voznik</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="colFormLabel" placeholder="npr. Max Verstappen" name="ime" value="{{ime}}">
+                            </div>
+                          </div>
+                        
+                        <h2>Osebe, ki imajo v imenu "{{iskalni_niz}}"</h2>
+                            <ul>
+                              % for voznik in osebe:
+                              <li>
+                                  {{voznik.ime}}
+                              </li>
+                              % end
+                            </ul>
+                        % if napaka:
+                        <p class="help is-danger">{{napaka}}</p>
+                        % end
                     </div>
-                    <div class="col-sm">
-                        <div class="text-center">
-                            <h3>Proge</h3>
-                            <img src="/static/celada.png" class="rounded-circle" alt="Proge" width="100" height="100">
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="text-center">
-                            <h3>Dirke</h3>
-                            <img src="/static/celada.png" class="rounded-circle" alt="Dirke" width="100" height="100">
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="text-center">
-                            <h3>Ekipe</h3>
-                            <img src="/static/celada.png" class="rounded-circle" alt="Ekipe" width="100" height="100">
-                        </div>
-                    </div>
-                    <div class="col-sm">
-                        <div class="text-center">
-                            <h3>Rezultati</h3>
-                            <img src="/static/celada.png" class="rounded-circle" alt="Rezultati" width="100" height="100">
-                        </div>
-                    </div>
-                </div>
+                
+                    <!-- <div class="field">
+                        <div class="control">
+                            <button class="button">Dodaj!</button>
+                        </div> -->
+                </form>
+            </div>
         </div>
+        
     
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    </body>
+  </html>
     
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-  </body>
-</html>
