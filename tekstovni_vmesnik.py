@@ -37,6 +37,29 @@ def izpisi_tocke(voznik):
         print(f'- {leto}: {st_tock} točk')
 
 
+def izpisi_ekipe(voznik):
+    """
+    Izpiše ekipo podanega voznika po letih.
+    """
+    for ekipa, leto in voznik.poisci_ekipe():
+        print(f'- {leto}: {ekipa}')
+
+
+def izpisi_profil(voznik):
+    """
+    Izpiše skupno število nastopov, zmag, stopničk in točk podanega voznika.
+    """
+    st_nastopov = voznik.poisci_skupno_st_nastopov()
+    st_zmag = voznik.poisci_skupno_st_zmag()
+    st_stopnick = voznik.poisci_skupno_st_stopnick()
+    st_tock = voznik.poisci_skupno_st_tock()
+    
+    print(f'Ime: {voznik.ime} {voznik.priimek}')
+    print(f'Število nastopov: {st_nastopov}')
+    print(f'Število zmag: {st_zmag}')
+    print(f'Število stopničk: {st_stopnick}')
+    print(f'Število točk: {st_tock}')
+
 
 def poisci_voznika():
     """
@@ -53,6 +76,7 @@ def poisci_voznika():
         else:
             print('Našel sem več voznikov, kateri od teh te zanima?')
             return vnesi_izbiro(vozniki)
+
 
 
 def voznikov_meni():
@@ -110,8 +134,10 @@ class VoznikMeni(Meni):
     """
     Izbire v meniju voznika.
     """
+    IZPISAL_PROFIL = ('Izpisal profil', izpisi_profil)
     IZPISAL_ZMAGE = ('Izpisal zmage', izpisi_zmage)
     IZPISAL_TOCKE = ('Izpisal število točk', izpisi_tocke)
+    IZPISAL_EKIPE = ('Izpisal ekipo', izpisi_ekipe)
     SEL_NAZAJ = ('Šel nazaj', glavni_meni)
 
 

@@ -117,7 +117,7 @@ urlji = ["https://www.formula1.com/en/results.html/2023/races/1141/bahrain/race-
          "https://www.formula1.com/en/results.html/2019/races/1009/great-britain/race-result.html", "https://www.formula1.com/en/results.html/2019/races/1010/germany/race-result.html",
          "https://www.formula1.com/en/results.html/2019/races/1011/hungary/race-result.html", "https://www.formula1.com/en/results.html/2019/races/1012/belgium/race-result.html",
          "https://www.formula1.com/en/results.html/2019/races/1013/italy/race-result.html", "https://www.formula1.com/en/results.html/2019/races/1014/singapore/race-result.html",
-         "https://www.formula1.com/en/results.html/2019/races/1015/russia/race-result.html", 
+         "https://www.formula1.com/en/results.html/2019/races/1015/russia/race-result.html", "https://www.formula1.com/en/results.html/2019/races/1016/japan/race-result.html",
          "https://www.formula1.com/en/results.html/2019/races/1017/mexico/race-result.html", "https://www.formula1.com/en/results.html/2019/races/1018/united-states/race-result.html",
          "https://www.formula1.com/en/results.html/2019/races/1019/brazil/race-result.html", "https://www.formula1.com/en/results.html/2019/races/1020/abu-dhabi/race-result.html"]
 

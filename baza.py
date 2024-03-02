@@ -292,8 +292,8 @@ def ustvari_bazo_ce_ne_obstaja(conn):
     """
     with conn:
         cur = conn.execute("SELECT COUNT(*) FROM sqlite_master")
-        #if cur.fetchone() == (0, ):
-        ustvari_bazo(conn)
+        if cur.fetchone() == (0, ):
+            ustvari_bazo(conn)
         
 def uvozi_podatke(tabele):
     """uvozi vse podatke iz datoteke"""
@@ -349,5 +349,4 @@ def uvozi_podatke(tabele):
 import os
 os.remove("baza.db")
 conn = sqlite3.connect("baza.db", timeout=10)
-#ustvari_bazo_ce_ne_obstaja(conn)
-#conn.execute("SELECT * FROM rezultat")
+ustvari_bazo_ce_ne_obstaja(conn)
