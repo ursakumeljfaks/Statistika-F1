@@ -127,7 +127,60 @@ class Voznik:
         for id, ime, priimek in conn.execute(sql, [f'%{besede[0]}%', f'%{besede[1]}%']):
             yield Voznik(ime=ime, priimek=priimek, id=id)
 
+    def dodaj_v_bazo(self):
+        """
+        Doda voznika v bazo.
+        """
+        assert self.id is None
+        with conn:
+            podatki_voznika = {"ime" : self.ime, "priimek" : self.priimek}
+            self.id = Voznik.dodaj_vrstico(**podatki_voznika)
 
+
+class Ekipa:
+    """
+    Razred za ekipo.
+    """
+    
+    def __init__(self, ime, id=None):
+        """
+        Konstruktor ekipe.
+        """
+        self.id = id
+        self.ime = ime
+
+    def __str__(self):
+        """
+        Znakovna predstavitev ekipe.
+        Vrne ime ekipe.
+        """
+        return self.ime
+
+    @staticmethod
+    def poisci(niz):
+        """
+        Vrne vse ekipe, ki v imenu vsebujejo dani niz.
+        """
+        if niz is None:
+            return "Vnesi nekaj!"
+        sql = "SELECT id, ime FROM ekipa WHERE ime LIKE ?"
+        for id, ime in conn.execute(sql, [f'%{niz}%']):
+            yield Ekipa(id=id, ime=ime)
+
+    def poisci_voznike(self):
+        """
+        Vrne voznike ekipe po letih.
+        """
+        sql = """
+            SELECT voznik.ime, voznik.priimek, strftime('%Y',dirka.datum) FROM rezultat
+                JOIN dirka ON dirka.id = rezultat.dirka_id
+                JOIN voznik ON voznik.id = rezultat.voznik_id
+            WHERE rezultat.ekipa_id = ?
+            GROUP BY strftime('%Y',dirka.datum), rezultat.ekipa_id
+            ORDER BY strftime('%Y',dirka.datum) DESC;
+        """
+        for voznik_ime, voznik_priimek, leto in conn.execute(sql, [self.id]):
+            yield (leto, voznik_ime, voznik_priimek)
 
 class Proga:
     """
@@ -165,7 +218,6 @@ class Proga:
         for ime, priimek, datum in conn.execute(sql, [self.id]):
             yield (ime, priimek, datum)
     
-    
     @staticmethod
     def poisci(niz):
         """
@@ -176,7 +228,6 @@ class Proga:
         sql = "SELECT id, ime, lokacija FROM proga WHERE ime LIKE ? OR lokacija LIKE ?"
         for id, ime, lokacija in conn.execute(sql, [f'%{niz}%', f'%{niz}%']):
             yield Proga(ime=ime, lokacija=lokacija, id=id)
-            
 
 
 class Dirka:
@@ -209,7 +260,7 @@ class Dirka:
         sql = "SELECT DISTINCT(strftime('%Y',dirka.datum)) FROM dirka"
         for leto in conn.execute(sql):
             yield leto[0]
-    
+
     @staticmethod
     def poisci_dirke_v_letu(leto):
         """
