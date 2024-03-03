@@ -1,4 +1,4 @@
-from model import Voznik
+from model import Voznik, Proga, Dirka
 from enum import Enum
 
 def vnesi_izbiro(moznosti):
@@ -78,8 +78,53 @@ def poisci_voznika():
             return vnesi_izbiro(vozniki)
 
 
+def izpisi_zmagovalce(proga):
+    """
+    Izpiše vse zmagovalce podane proge.
+    """
+    for ime, priimek, datum in proga.poisci_zmagovalce():
+        print(f'- ({datum}):  {ime} {priimek}')
 
-def voznikov_meni():
+
+def poisci_progo():
+    """
+    Poišče progo, ki jo vnese uporabnik.
+    """
+    while True:
+        vnos = input('Katera proga te zanima? ')
+        proge = list(Proga.poisci(vnos))
+        if len(proge) == 1:
+            print(proge[0].ime + ", " + proge[0].lokacija)
+            return proge[0]
+        elif len(proge) == 0:
+            print('Te proge ne najdem. Poskusi znova.')
+        else:
+            print('Našel sem več prog, katera od teh te zanima?')
+            return vnesi_izbiro(proge)
+
+
+def izpisi_dirko():
+    """
+    Izpiše mesto, ime, priimek in število točk vseh voznikov na dirki.
+    """
+    dirka = poisci_dirko()
+    for mesto, ime, priimek, tocke in dirka.poisci_rezultate_dirke():
+        print(f'- {mesto}. mesto - {ime} {priimek} - {tocke} točk')
+        
+
+def poisci_dirko():
+    """
+    Poišče dirko, ki jo vnese uporabnik.
+    """
+    print('Katera sezona/leto te zanima?')
+    leto = vnesi_izbiro(list(Dirka.poisci_leto()))
+    print('Katera dirka te zanima?')
+    dirka = vnesi_izbiro(list(Dirka.poisci_dirke_v_letu(leto)))
+    return dirka
+        
+
+
+def voznik_meni():
     """
     Prikazuje voznikov meni, dokler uporabnik ne izbere izhoda.
     """
@@ -90,6 +135,19 @@ def voznikov_meni():
         if izbira == VoznikMeni.SEL_NAZAJ:
             return
         izbira.funkcija(voznik)
+
+
+def proga_meni():
+    """
+    Prikazuje meni proge, dokler uporabnik ne izbere izhoda.
+    """
+    proga = poisci_progo()
+    while True:
+        print('Kaj bi rad delal?')
+        izbira = vnesi_izbiro(ProgaMeni)
+        if izbira == ProgaMeni.SEL_NAZAJ:
+            return
+        izbira.funkcija(proga)
 
 
 def domov():
@@ -141,11 +199,21 @@ class VoznikMeni(Meni):
     SEL_NAZAJ = ('Šel nazaj', glavni_meni)
 
 
+class ProgaMeni(Meni):
+    """
+    Izbire v meniju proge.
+    """
+    IZPISAL_ZMAGOVALCE = ('Izpisal zmagovalce', izpisi_zmagovalce)
+    SEL_NAZAJ = ('Šel nazaj', glavni_meni)
+
+
 class GlavniMeni(Meni):
     """
     Izbire v glavnem meniju.
     """
-    ISKAL_VOZNIKA = ('Iskal voznika', voznikov_meni)
+    ISKAL_VOZNIKA = ('Iskal voznika', voznik_meni)
+    ISKAL_PROGO = ('Iskal progo', proga_meni)
+    ISKAL_DIRKO = ('Iskal rezultate dirke', izpisi_dirko)
     SEL_DOMOV = ('Šel domov', domov)
 
 

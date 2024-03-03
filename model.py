@@ -127,11 +127,108 @@ class Voznik:
         for id, ime, priimek in conn.execute(sql, [f'%{besede[0]}%', f'%{besede[1]}%']):
             yield Voznik(ime=ime, priimek=priimek, id=id)
 
-    def dodaj_v_bazo(self):
+
+
+class Proga:
+    """
+    Razred za progo.
+    """
+
+    def __init__(self, ime, lokacija, *, id=None):
         """
-        Doda voznika v bazo.
+        Konstruktor proge.
         """
-        assert self.id is None
-        with conn:
-            podatki_voznika = {"ime" : self.ime, "priimek" : self.priimek}
-            self.id = Voznik.dodaj_vrstico(**podatki_voznika)
+        self.id = id
+        self.ime = ime
+        self.lokacija = lokacija
+
+    def __str__(self):
+        """
+        Znakovna predstavitev proge.
+        Vrne ime in lokacijo.
+        """
+        return self.ime + ", " + self.lokacija
+    
+    
+    def poisci_zmagovalce(self):
+        """
+        Vrne zmagovalce podane proge po letih.
+        """
+        sql = """
+            SELECT voznik.ime, voznik.priimek, dirka.datum FROM rezultat
+                JOIN dirka ON dirka.id = rezultat.dirka_id
+                JOIN proga ON proga.id = dirka.proga_id
+                JOIN voznik ON voznik.id = rezultat.voznik_id
+            WHERE proga.id = ? AND rezultat.mesto = '1' AND dirka.tip = 'dirka'
+            ORDER BY dirka.datum DESC;
+        """
+        for ime, priimek, datum in conn.execute(sql, [self.id]):
+            yield (ime, priimek, datum)
+    
+    
+    @staticmethod
+    def poisci(niz):
+        """
+        Vrne vse proge, ki v imenu vsebujejo dani niz.
+        """
+        if niz is None:
+            return "Vnesi nekaj!"
+        sql = "SELECT id, ime, lokacija FROM proga WHERE ime LIKE ? OR lokacija LIKE ?"
+        for id, ime, lokacija in conn.execute(sql, [f'%{niz}%', f'%{niz}%']):
+            yield Proga(ime=ime, lokacija=lokacija, id=id)
+            
+
+
+class Dirka:
+    """
+    Razred za dirko.
+    """
+
+    def __init__(self, tip, ime, datum, proga, *, id=None):
+        """
+        Konstruktor dirke.
+        """
+        self.id = id
+        self.tip = tip
+        self.ime = ime
+        self.datum = datum
+        self.proga = proga
+
+    def __str__(self):
+        """
+        Znakovna predstavitev dirke.
+        Vrne ime in lokacijo.
+        """
+        return self.ime + ", " + self.datum + ", "+ self.tip
+    
+    @staticmethod
+    def poisci_leto():
+        """
+        Vrne seznam sezon/let.
+        """
+        sql = "SELECT DISTINCT(strftime('%Y',dirka.datum)) FROM dirka"
+        for leto in conn.execute(sql):
+            yield leto[0]
+    
+    @staticmethod
+    def poisci_dirke_v_letu(leto):
+        """
+        Vrne vse dirke in datume v danem letu.
+        """
+        sql = "SELECT id, tip, ime, datum, proga_id FROM dirka WHERE strftime('%Y',dirka.datum) LIKE ?"
+        for id, tip, ime, datum, proga in conn.execute(sql, [leto]):
+            yield Dirka(tip=tip, ime=ime, datum=datum, proga=proga, id=id)
+            
+    def poisci_rezultate_dirke(self):
+        """
+        Vrne mesto, ime, priimek in število točk vseh voznikov na dirki.
+        """
+        sql = """
+            SELECT rezultat.mesto, voznik.ime, voznik.priimek, rezultat.tocke FROM rezultat
+                JOIN dirka ON dirka.id = rezultat.dirka_id
+                JOIN voznik ON voznik.id = rezultat.voznik_id
+            WHERE dirka.id = ? AND rezultat.mesto > 0
+            ORDER BY rezultat.mesto ASC;
+        """
+        for mesto, ime, priimek, tocke in conn.execute(sql, [self.id]):
+            yield (mesto, ime, priimek, tocke)
