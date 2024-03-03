@@ -100,5 +100,21 @@ def dirka_leto(leto):
         leto=leto
     )
 
+@bottle.get('/dirka/<leto>/<datum>/')
+def dirka_leto(leto, datum):
+    # dirka = None
+    rezultati = []
+    dirke = Dirka.poisci_dirke_v_letu(leto)
+    for d in dirke:
+        if d.datum == datum:
+            rezultati.extend(d.poisci_rezultate_dirke())
+
+    return bottle.template(
+        'dirka_leto_rezultati.html',
+        rezultati=rezultati,
+        leto=leto,
+        datum=datum,
+        d=d
+    )
 
 bottle.run(debug=True, reloader=True)
