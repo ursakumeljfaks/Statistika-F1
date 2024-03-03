@@ -118,6 +118,8 @@ class Voznik:
         """
         Vrne vse voznike, ki v imenu vsebujejo dani niz.
         """
+        if niz is None:
+            return "Vnesi nekaj!"
         besede = niz.split(' ')
         if len(besede) == 1:
             besede = [besede[0], besede[0]]
