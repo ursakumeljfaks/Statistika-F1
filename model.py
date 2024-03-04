@@ -1,9 +1,10 @@
 import baza
 import sqlite3
+import os
+from pridobi_podatke import poberi_podatke
 
 conn = sqlite3.connect('baza.db', timeout=10)
 baza.ustvari_bazo_ce_ne_obstaja(conn)
-conn.execute('PRAGMA foreign_keys = ON')
 
 class Voznik:
     """
@@ -257,7 +258,7 @@ class Dirka:
         """
         Vrne seznam sezon/let.
         """
-        sql = "SELECT DISTINCT(strftime('%Y',dirka.datum)) FROM dirka"
+        sql = "SELECT DISTINCT(strftime('%Y',dirka.datum)) FROM dirka ORDER BY dirka.datum DESC"
         for leto in conn.execute(sql):
             yield leto[0]
 
@@ -283,3 +284,33 @@ class Dirka:
         """
         for mesto, ime, priimek, tocke in conn.execute(sql, [self.id]):
             yield (mesto, ime, priimek, tocke)
+            
+
+def dodaj_rezultate_dirke(url):
+    """
+    Dobi url spletne strani, kjer so rezultati dirke in jih doda v bazo.
+    """
+    # s spleta poberemo podatke, zapisemo v novo datoteko, uvozimo v bazo
+    poberi_podatke(url, "podatki_novo.csv")
+    
+    
+    # nove podatke dodamo v datoteko vseh podatkov
+    podatki_vsi = open("podatki.csv", "a", encoding="utf-8")
+    podatki_novo = open("podatki_novo.csv", "r", encoding="utf-8")
+    vrstica = podatki_novo.readline().strip()
+    while vrstica != "":
+        print(vrstica, file=podatki_vsi)
+        vrstica = podatki_novo.readline().strip()
+    podatki_vsi.close()
+    podatki_novo.close()
+    
+    # v bazo dodamo nove podatke
+    tabele = baza.pripravi_tabele(conn)
+    baza.uvozi_podatke(tabele, "podatki.csv")
+    
+    # v datoteko urljev dodamo novi url
+    with open("podatki_urlji.csv", "a", encoding="utf-8") as urlji:
+        print(url, file=urlji)
+    
+    # pobrišemo novo datoteko s podatki
+    os.remove("podatki_novo.csv")

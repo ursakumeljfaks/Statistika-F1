@@ -1,6 +1,6 @@
-from model import Voznik, Proga, Dirka
+from model import Voznik, Proga, Dirka, dodaj_rezultate_dirke
 from enum import Enum
-
+import baza
 def vnesi_izbiro(moznosti):
     """
     Uporabniku da na izbiro podane možnosti.
@@ -150,6 +150,15 @@ def proga_meni():
         izbira.funkcija(proga)
 
 
+def dodaj_dirko():
+    """
+    Prebere url spletne strani, kjer so rezultati dirke in jih doda v bazo.
+    """
+    url = input("Vnesi url strani, kjer so rezultati dirke: ")
+    dodaj_rezultate_dirke(url)
+    
+
+
 def domov():
     """
     Pozdravi pred izhodom.
@@ -214,6 +223,7 @@ class GlavniMeni(Meni):
     ISKAL_VOZNIKA = ('Iskal voznika', voznik_meni)
     ISKAL_PROGO = ('Iskal progo', proga_meni)
     ISKAL_DIRKO = ('Iskal rezultate dirke', izpisi_dirko)
+    DODAL_DIRKO = ('Dodal rezultate dirke', dodaj_dirko)
     SEL_DOMOV = ('Šel domov', domov)
 
 

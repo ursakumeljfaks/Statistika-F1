@@ -98,7 +98,9 @@ class Rezultat(Tabela):
         """)
     
     def dodaj_vrstico(self, **podatki):
-        return super().dodaj_vrstico(**podatki)
+        rez = self.conn.execute("SELECT id FROM rezultat WHERE dirka_id= :dirka_id AND voznik_id = :voznik_id", podatki).fetchone()
+        if rez is None:
+            return super().dodaj_vrstico(**podatki)
 
 class Voznik(Tabela):
     """
@@ -247,15 +249,6 @@ def izbrisi_tabele(tabele):
         t.izbrisi()
 
 
-# def uvozi_podatke(tabele):
-#     """
-#     Uvozi podatke v podane tabele.
-#     """
-#     for t in tabele:
-#         print("uvozi v tabelo", t.ime)
-#         t.uvozi()
-
-
 def izprazni_tabele(tabele):
     """
     Izprazni podane tabele.
@@ -295,7 +288,7 @@ def ustvari_bazo_ce_ne_obstaja(conn):
         if cur.fetchone() == (0, ):
             ustvari_bazo(conn)
         
-def uvozi_podatke(tabele):
+def uvozi_podatke(tabele, datoteka="podatki.csv"):
     """uvozi vse podatke iz datoteke"""
 
     rezultat_tabela = tabele[0]
@@ -304,13 +297,13 @@ def uvozi_podatke(tabele):
     dirka_tabela = tabele[3]
     proga_tabela = tabele[4]
 
-    with open("podatki.csv", "r", encoding="utf-8") as dat:
+    with open(datoteka, "r", encoding="utf-8") as dat:
         tip_dirke = ""
         kraj = ""
         datum = ""
         proga = ""
         for vrstica in dat:
-            podatki = vrstica.split(",")
+            podatki = vrstica.strip().split(",")
             if podatki[0] == "@":
                 tip_dirke = podatki[1]
                 proga = podatki[2]
@@ -345,8 +338,9 @@ def uvozi_podatke(tabele):
 
                 podatki_rezultat = {"dirka_id" : dirka_id, "voznik_id" : voznik_id, "ekipa_id" : ekipa_id, "mesto" : mesto, "tocke" : tocke, "st_krogov" : st_krogov, "st_avtomobila" : st_avtomobila}
                 rezultat_tabela.dodaj_vrstico(**podatki_rezultat)
-                    
-import os
-os.remove("baza.db")
+
+if __name__ == "__main__":        
+    import os
+    os.remove("baza.db")
 conn = sqlite3.connect("baza.db", timeout=10)
 ustvari_bazo_ce_ne_obstaja(conn)
