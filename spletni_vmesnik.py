@@ -4,21 +4,24 @@ from model import Voznik, Ekipa, Proga, Dirka, dodaj_rezultate_dirke
 
 @bottle.route('/prijava/', method=['GET', 'POST'])
 def prijava():
-    if bottle.request.method == "POST":
-        ime = bottle.request.forms.get('uporabnisko_ime')
-        geslo = bottle.request.forms.get('geslo')
-        if ime == 'admin' and geslo == 'admin':
-            bottle.redirect('/izpolnitev/')
-        else:
-            return bottle.template('prijava.html', napaka='Napačno uporabniško ime ali geslo!')
+    ime = bottle.request.forms.get('uporabnisko_ime')
+    geslo = bottle.request.forms.get('geslo')
+    if ime == 'admin' and geslo == 'admin':
+        bottle.redirect('/izpolnitev/')
     else:
-        return bottle.template('prijava.html', napaka=None)
+        return bottle.template('prijava.html', uspesnost='Napačno uporabniško ime ali geslo!')
 
-@bottle.route('/izpolnitev/')
+
+@bottle.get('/izpolnitev/')
+def izpolnitev():
+    return bottle.template('izpolnitev.html', url="")
+
+@bottle.post('/izpolnitev/')
 def izpolnitev():
     url = bottle.request.query.getunicode('url')
     dodaj_rezultate_dirke(url)
-    return bottle.template('izpolnitev.html', uspesnost='Podatki so bili uspešno dodani.')
+    bottle.redirect('/dirka/')
+
 
 @bottle.get('/')
 def naslovna_stran():

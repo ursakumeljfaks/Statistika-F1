@@ -68,7 +68,11 @@
                         </div>
                     </div>
                     </form>
-                    
+                    % if uspesnost:
+                    <div class="alert alert-danger" role="alert">
+                        {{uspesnost}}
+                    </div>
+                    % end
                 </div>
         </div>
     
