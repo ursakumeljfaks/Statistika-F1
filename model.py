@@ -290,10 +290,7 @@ def dodaj_rezultate_dirke(url):
     """
     Dobi url spletne strani, kjer so rezultati dirke in jih doda v bazo.
     """
-    # s spleta poberemo podatke, zapisemo v novo datoteko, uvozimo v bazo
-    if not os.path.exists("podatki_novo.csv"):
-        open("podatki_novo.csv", "w").close()
-        
+    # s spleta poberemo podatke, zapisemo v novo datoteko, uvozimo v bazo       
     poberi_podatke(url, "podatki_novo.csv")
     
     

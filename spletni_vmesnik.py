@@ -18,7 +18,7 @@ def izpolnitev():
 
 @bottle.post('/izpolnitev/')
 def izpolnitev():
-    url = bottle.request.query.getunicode('url')
+    url = bottle.request.forms.get('url')
     dodaj_rezultate_dirke(url)
     bottle.redirect('/dirka/')
 
