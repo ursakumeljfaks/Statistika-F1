@@ -35,15 +35,10 @@
               </li>
             </ul>
             
-            % if defined("uporabnik"):
-            <form class="d-flex" action="/odjava/" method="POST">
-                <button class="btn btn-outline-success">Odjava</button>            
-            </form>
-            % else: 
-            <form class="d-flex" action="/prijava/" method="GET">
+
+              <form class="d-flex" action="/prijava/" method="GET">
                 <button class="btn btn-outline-success">Prijava</button>            
-            </form>
-            % end
+              </form>
           </div>
         </div>
       </nav>

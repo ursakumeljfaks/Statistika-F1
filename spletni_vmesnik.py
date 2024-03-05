@@ -9,18 +9,18 @@ def prijava():
     if ime == 'admin' and geslo == 'admin':
         bottle.redirect('/izpolnitev/')
     else:
-        return bottle.template('prijava.html', uspesnost='Napačno uporabniško ime ali geslo!')
-
+        return bottle.template('prijava.html')
 
 @bottle.get('/izpolnitev/')
 def izpolnitev():
-    return bottle.template('izpolnitev.html', url="")
+    uporabnisko_ime = "admin"
+    return bottle.template('izpolnitev.html', url="", uporabnisko_ime=uporabnisko_ime)
 
 @bottle.post('/izpolnitev/')
 def izpolnitev():
     url = bottle.request.forms.get('url')
     dodaj_rezultate_dirke(url)
-    bottle.redirect('/dirka/')
+    bottle.redirect('/izpolnitev/')
 
 
 @bottle.get('/')

@@ -35,14 +35,14 @@
               </li>
             </ul>
             
-            % if defined("uporabnik"):
-            <form class="d-flex" action="/odjava/" method="POST">
+            % if uporabnisko_ime == "admin":
+              <form class="d-flex" action="/" method="GET">
                 <button class="btn btn-outline-success">Odjava</button>            
-            </form>
+              </form>
             % else: 
-            <form class="d-flex" action="/prijava/" method="GET">
+              <form class="d-flex" action="/prijava/" method="GET">
                 <button class="btn btn-outline-success">Prijava</button>            
-            </form>
+              </form>
             % end
           </div>
         </div>

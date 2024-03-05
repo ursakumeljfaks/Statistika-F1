@@ -35,15 +35,10 @@
               </li>
             </ul>
             
-            % if defined("uporabnik"):
-            <form class="d-flex" action="/odjava/" method="POST">
-                <button class="btn btn-outline-success">Odjava</button>            
-            </form>
-            % else: 
             <form class="d-flex" action="/prijava/" method="GET">
-                <button class="btn btn-outline-success">Prijava</button>            
+              <button class="btn btn-outline-success">Prijava</button>            
             </form>
-            % end
+
           </div>
         </div>
       </nav>
@@ -54,25 +49,21 @@
         <div class="d-flex mt-5 justify-content-center align-items-center">
                 <div class="row g-3 justify-content-center">
                     <form action="/prijava/" method="POST">
-                    <div class="row mb-4">
-                        <label for="colFormLabel" class="col-sm-4 col-form-label">Vpiši uporabniško ime:</label>
-                        <div class="col-sm-8 d-flex align-items-center">
-                            <input type="text" class="form-control me-2" id="colFormLabel" placeholder="Uporabniško ime" name="uporabnisko_ime" value="admin">
+                        <div class="row mb-4">
+                            <label for="colFormLabel" class="col-sm-4 col-form-label">Vpiši uporabniško ime:</label>
+                            <div class="col-sm-8 d-flex align-items-center">
+                                <input type="text" class="form-control me-2" id="colFormLabel" placeholder="Uporabniško ime" name="uporabnisko_ime" value="admin">
+                            </div>
+                            <label for="colFormLabel" class="col-sm-4 col-form-label">Vpiši geslo:</label>
+                            <div class="col-sm-8 d-flex align-items-center">
+                                <input type="password" class="form-control me-2" id="colFormLabel" placeholder="Geslo" name="geslo" value="admin">
+                            </div>
+                            <div class="col-sm-12 d-flex justify-content-center mt-3"> <!-- Postavitev gumba na sredino -->
+                                <button type="submit" class="btn btn-outline-success btn-lg">Prijava</button> <!-- Uporaba btn-lg za povečanje velikosti gumba -->
+                            </div>
                         </div>
-                        <label for="colFormLabel" class="col-sm-4 col-form-label">Vpiši geslo:</label>
-                        <div class="col-sm-8 d-flex align-items-center">
-                            <input type="password" class="form-control me-2" id="colFormLabel" placeholder="Geslo" name="geslo" value="admin">
-                        </div>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success">Prijavi</button>
-                        </div>
-                    </div>
                     </form>
-                    % if uspesnost:
-                    <div class="alert alert-danger" role="alert">
-                        {{uspesnost}}
-                    </div>
-                    % end
+                    
                 </div>
         </div>
     
