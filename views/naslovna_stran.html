@@ -30,7 +30,6 @@
                   <a class="dropdown-item" href="/voznik/">Vozniki</a>
                   <a class="dropdown-item" href="/proga/">Proge</a>
                   <a class="dropdown-item" href="/dirka/">Dirke</a>
-                  <a class="dropdown-item" href="/rezultati/">Rezultati</a>
                   <a class="dropdown-item" href="/ekipa/">Ekipe</a>
                 </div>
               </li>
@@ -41,8 +40,8 @@
                 <button class="btn btn-outline-success">Odjava</button>            
             </form>
             % else: 
-            <form class="d-flex" action="/registracija/" method="GET">
-                <button class="btn btn-outline-success">Registracija</button>            
+            <form class="d-flex" action="/prijava/" method="GET">
+                <button class="btn btn-outline-success">Prijava</button>            
             </form>
             % end
           </div>
@@ -77,14 +76,6 @@
                             <img src="/static/dirka.png" class="rounded-circle" alt="Dirke" width="100" height="100">
                           </div>
                         </a>
-                    </div>
-                    <div class="col-sm">
-                      <a href="/rezultati/">
-                        <div class="text-center">
-                            <h3>Rezultati</h3>
-                            <img src="/static/rezultati.png" class="rounded-circle" alt="Rezultati" width="100" height="100">
-                        </div>
-                      </a>
                     </div>
                     <div class="col-sm">
                       <a href="/ekipa/">
