@@ -13,6 +13,8 @@ def pretvori_cas(cas):
 
 def poberi_podatke(url, datoteka="podatki.csv"):
     '''pridobi podatke o datumu, lokaciji in rezultatih tekme. To zapiše v datoteko'''
+    if url is None:
+        return "Vnesi nekaj!"
     url = url.strip()
     odgovor1 = requests.get(url) 
     juha1 = bs4.BeautifulSoup(odgovor1.content, "html.parser")
