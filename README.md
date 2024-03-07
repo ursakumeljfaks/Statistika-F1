@@ -1,9 +1,9 @@
 # Statistika-F1
 Ta repozitorij vsebuje projektno nalogo o statistiki Formule 1. V repozitoriju sta že objavljeni *baza.db* in *podatki.csv*, saj prenos le teh, zaradi večjega števila podatkov, nekoliko dlje traja, zato lahko zaženete le datoteko *spletni_vmesnik.py*. V primeru, da želite vse skupaj stestirati, je postopek sledeč:
 1. prenesite si cel repozitorij
-2. poženite pridobi_podatke.py
-3. poženite baza.py
-4. poženite spletni_vmesnik.py in kliknite na ustvarjeno povezavo
+2. poženite *pridobi_podatke.py*
+3. poženite *baza.py*
+4. poženite *spletni_vmesnik.py* in kliknite na ustvarjeno povezavo
 
 Podatke iz uradne strani Formule 1 lahko administrator posodablja tako, da skopira url (F1 > results > leto > races > izberite dirko in skopirajte ta url). Administrator se zaradi enostavnosti prijavi z *uporabniškim imenom **admin*** in *geslom **admin***, saj je bilo kreiranje kriptiranega gesla povsem neuporabno, ker za druge uporabnike je namen le pregled razno raznih stvari. 
 
