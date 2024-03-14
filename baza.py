@@ -2,7 +2,7 @@ import csv
 import sqlite3
 
 PARAM_FMT = ":{}" # za SQLite
-# PARAM_FMT = "%s({})" # za PostgreSQL/MySQL
+
 
 
 class Tabela:
@@ -68,17 +68,12 @@ class Tabela:
         return cur.lastrowid
     
 
-
 class Rezultat(Tabela):
     """
     Tabela za rezultate.
     """
     ime = "rezultat"
     podatki = "podatki.csv"
-
-    # def __init__(self, conn, rezultat):
-    #     super().__init__(conn)
-    #     self.rezultat = rezultat
 
     def ustvari(self):
         """
@@ -109,10 +104,6 @@ class Voznik(Tabela):
     ime = "voznik"
     podatki = "podatki.csv"
 
-    # def __init__(self, conn, voznik):
-    #     super().__init__(conn)
-    #     self.voznik = voznik
-
     def ustvari(self):
         """
         Ustvari tabelo voznik.
@@ -141,10 +132,6 @@ class Ekipa(Tabela):
     ime = "ekipa"
     podatki = "podatki.csv"
 
-    # def __init__(self, conn, ekipa):
-    #     super().__init__(conn)
-    #     self.ekipa = ekipa
-
     def ustvari(self):
         """
         Ustvari tabelo ekipa.
@@ -171,10 +158,6 @@ class Dirka(Tabela):
     """
     ime = "dirka"
     podatki = "podatki.csv"
-
-    # def __init__(self, conn, dirka):
-    #     super().__init__(conn)
-    #     self.dirka = dirka
 
     def ustvari(self):
         """
@@ -206,10 +189,6 @@ class Proga(Tabela):
     """
     ime = "proga"
     podatki = "podatki.csv"
-
-    # def __init__(self, conn, proga):
-    #     super().__init__(conn)
-    #     self.proga = proga
 
     def ustvari(self):
         """
