@@ -27,10 +27,16 @@ def izpolnitev():
 def naslovna_stran():
     return bottle.template('naslovna_stran.html', napaka=None)
 
+@bottle.get ('/static/<pot:path>')
+def vrni_staticno(pot):
+    return bottle.static_file(pot, root="static")
+
 @bottle.get('/voznik/')
 def isci_voznika():
     iskalni_niz = bottle.request.query.getunicode('iskalni_niz')
-    vozniki = Voznik.poisci(iskalni_niz)
+    vozniki = list(Voznik.poisci(""))[:10]
+    if iskalni_niz:
+        vozniki = [voznik for voznik in vozniki if iskalni_niz.lower() in voznik.ime.lower()]
     return bottle.template(
         'voznik.html',
         iskalni_niz=iskalni_niz,
@@ -64,7 +70,10 @@ def tocke_in_zmage_voznika(priimek):
 @bottle.get('/ekipa/')
 def isci_ekipo():
     iskalni_niz = bottle.request.query.getunicode('iskalni_niz')
-    ekipe = Ekipa.poisci(iskalni_niz)
+    ekipe = list(Ekipa.poisci(""))[:10]
+    if iskalni_niz:
+        ekipe = [ekipa for ekipa in ekipe if iskalni_niz.lower() in ekipa.ime.lower()]
+    
     return bottle.template(
         'ekipa.html',
         iskalni_niz=iskalni_niz,
@@ -86,7 +95,10 @@ def voznik_in_leto_ekipe(ime):
 @bottle.get('/proga/')
 def isci_progo():
     iskalni_niz = bottle.request.query.getunicode('iskalni_niz')
-    proge = Proga.poisci(iskalni_niz)
+    proge = list(Proga.poisci(""))[:10]
+    if iskalni_niz:
+        proge = [proga for proga in proge if iskalni_niz.lower() in proga.ime.lower()]
+    
     return bottle.template(
         'proga.html',
         iskalni_niz=iskalni_niz,
