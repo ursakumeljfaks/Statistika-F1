@@ -1,5 +1,5 @@
 # Statistika-F1
-Ta repozitorij vsebuje projektno nalogo o statistiki Formule 1, katere glavni namen je bil prikazati rezultate posamezne dirke, nekaj več o voznikih, pregled samih ekip in prog. V repozitoriju sta že objavljeni *baza.db* in *podatki.csv*, saj prenos le teh, zaradi večjega števila podatkov, nekoliko dlje traja, zato lahko zaženete le datoteko *spletni_vmesnik.py*. Prav tako projekt uporablja knjižnici *requests* in *Beautiful Soup*. V primeru, da želite vse skupaj stestirati, je postopek sledeč:
+Ta repozitorij vsebuje projektno nalogo o statistiki Formule 1, katere glavni namen je bil prikazati rezultate posamezne dirke, nekaj več o voznikih, pregled samih ekip in prog. Kot primer uspešnost posameznega voznika, število nastopov posameznega voznika, ekipe in njeni vozniki v posameznem letu, dirke v posameznem letu, ... V repozitoriju sta že objavljeni *baza.db* in *podatki.csv*, saj prenos le teh, zaradi večjega števila podatkov, nekoliko dlje traja, zato lahko zaženete le datoteko *spletni_vmesnik.py*. Prav tako projekt uporablja knjižnici *requests* in *Beautiful Soup*. V primeru, da želite vse skupaj stestirati, je postopek sledeč:
 1. prenesite si cel repozitorij
 2. poženite *pridobi_podatke.py*
 3. poženite *baza.py*
