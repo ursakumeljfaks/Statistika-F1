@@ -34,7 +34,7 @@ def vrni_staticno(pot):
 @bottle.get('/voznik/')
 def isci_voznika():
     iskalni_niz = bottle.request.query.getunicode('iskalni_niz')
-    vozniki = list(Voznik.poisci(""))[:10]
+    vozniki = list(Voznik.poisci(""))
     if iskalni_niz:
         vozniki = [voznik for voznik in vozniki if iskalni_niz.lower() in voznik.ime.lower()]
     return bottle.template(
@@ -70,7 +70,7 @@ def tocke_in_zmage_voznika(priimek):
 @bottle.get('/ekipa/')
 def isci_ekipo():
     iskalni_niz = bottle.request.query.getunicode('iskalni_niz')
-    ekipe = list(Ekipa.poisci(""))[:10]
+    ekipe = list(Ekipa.poisci(""))
     if iskalni_niz:
         ekipe = [ekipa for ekipa in ekipe if iskalni_niz.lower() in ekipa.ime.lower()]
     
@@ -95,7 +95,7 @@ def voznik_in_leto_ekipe(ime):
 @bottle.get('/proga/')
 def isci_progo():
     iskalni_niz = bottle.request.query.getunicode('iskalni_niz')
-    proge = list(Proga.poisci(""))[:10]
+    proge = list(Proga.poisci(""))
     if iskalni_niz:
         proge = [proga for proga in proge if iskalni_niz.lower() in proga.ime.lower()]
     
