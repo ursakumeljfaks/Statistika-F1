@@ -34,10 +34,18 @@
                 </div>
               </li>
             </ul>
-            
-              <form class="d-flex" action="/prijava/" method="GET">
+            % if uporabnisko_ime:
+            <form class="d-flex" action="/" method="GET">
+              <button class="btn btn-outline-success">Odjava</button>            
+            </form>
+            % else: 
+            <form class="d-flex" action="/prijava/" method="GET">
+              <button class="btn btn-outline-success">Prijava</button>            
+            </form>
+            % end
+              <!-- <form class="d-flex" action="/prijava/" method="GET">
                 <button class="btn btn-outline-success">Prijava</button>            
-              </form>
+              </form> -->
           </div>
         </div>
       </nav>

@@ -1,4 +1,4 @@
-% rebase('osnova.html', title='Vozniki')
+% rebase('osnova.html', title='Vozniki', uporabnisko_ime=False)
     <body>
         <h1 class="text-center" style="margin-top: 70px;">Vse o voznikih</h1>
         <div class="d-flex mt-5 justify-content-center align-items-center">
@@ -10,6 +10,7 @@
                             <div class="col-sm-8 d-flex align-items-center">
                                 <input type="text" class="form-control me-2" id="colFormLabel" placeholder="npr. Max Verstappen" name="iskalni_niz" value="{{iskalni_niz}}">
                                 <button type="submit" class="btn btn-outline-success">Išči</button>
+
                             </div>
                         </div>
                         <table class="table table-striped">
